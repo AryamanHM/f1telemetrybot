@@ -22,6 +22,10 @@ async def on_ready():
   print(f"I am ready to go - {client.user.name}")
   await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f"Drive to Survive"))
 
+@client.event
+async def on_command_error(ctx, error):
+    await ctx.send(f"An error occured: {str(error)}")  
+
 @client.command(name="ping")
 async def _ping(ctx):
   global times_used
@@ -36,10 +40,10 @@ async def _command(ctx,arg1,arg2,arg3,arg4,arg5):
   driver_1=arg4
   driver_2=arg5
   await ctx.send("{},{},{},{},{}".format(year,track,session_time,driver_1,driver_2))
-  session = ff1.get_session(2022, '{track}', str(arg3))
+  session = ff1.get_session(int(arg1), str(arg2), str(arg3))
   session.load()
-  laps_driver_1 = session.laps.pick_driver(driver_1)
-  laps_driver_2 = session.laps.pick_driver(driver_2)
+  laps_driver_1 = session.laps.pick_driver(str(arg4))
+  laps_driver_2 = session.laps.pick_driver(str(arg5))
 
   fastest_driver_1 = laps_driver_1.pick_fastest()
   fastest_driver_2 = laps_driver_2.pick_fastest()
@@ -111,13 +115,8 @@ async def _command(ctx,arg1,arg2,arg3,arg4,arg5):
   with open('telemetry.png', 'rb') as f:
     picture = discord.File(f)
     await ctx.send(file=picture)
-
-
-
-
-    
-    
-    
+  
+  ff1.Cache.clear_cache('cache')   
 
  
 
