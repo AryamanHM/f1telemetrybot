@@ -120,9 +120,10 @@ async def _command(ctx,arg1,arg2,arg3,arg4,arg5):
 
  
 
-#my_secret = os.environ['TOKEN']
-#client.run(my_secret)   
-client.run("")  
+my_secret = os.environ['TOKEN']
+client.run(my_secret)   
+##token = os.environ.get('BOT_TOKEN')
+##client.run("")  
 
 
   
