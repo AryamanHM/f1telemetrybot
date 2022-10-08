@@ -123,7 +123,7 @@ async def _command(ctx,arg1,arg2,arg3,arg4,arg5):
 
 #my_secret = os.environ['TOKEN']
 #client.run(my_secret)   
-client.run("MTAyNDkyNTYxMzM3NjY4MDAwNw.G-_IcH.PDS9B3j5-YsUcOQaxEogIaXSDvez3_df55j31k")  
+client.run("")  
 
 
   
