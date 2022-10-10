@@ -10,7 +10,6 @@ import numpy as np
 from matplotlib.colors import ListedColormap
 from matplotlib.collections import LineCollection
 import asyncio
-from keep_alive import keep_alive
 
 
 prefix = "#fuan "
@@ -118,11 +117,10 @@ async def _command(ctx,arg1,arg2,arg3,arg4,arg5):
   ff1.Cache.clear_cache('cache')   
 
  
-keep_alive()
-my_secret = os.environ['TOKEN']
-client.run(my_secret)   
+##my_secret = os.environ['TOKEN']
+##client.run(my_secret)   
 ##token = os.environ.get('BOT_TOKEN')
-##client.run("")  
+client.run("MTAyNDkyNTYxMzM3NjY4MDAwNw.GdUuGW.enb1QzLalrx9ZWodVxMkIUMo1KP3odQg-BPrSk")  
 
 
   
