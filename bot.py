@@ -28,7 +28,9 @@ async def on_command_error(ctx, error):
 
 @client.command(name="ping")
 async def _ping(ctx):
+  global times_used
   await ctx.send(f"Ping: {client.latency}")
+  times_used = times_used + 1
 
 @client.command(name="telemetry")
 async def _command(ctx,arg1,arg2,arg3,arg4,arg5):
