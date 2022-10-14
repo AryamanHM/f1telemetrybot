@@ -170,7 +170,8 @@ async def _command(ctx,arg1,arg2,arg3,arg4,arg5):
   cbar = plt.colorbar(mappable=lc_comp, boundaries=np.arange(1,4),ticks=[driver_1,driver_2])
   cbar.set_ticks(np.arange(1.5, 3.5))
   cbar.set_ticklabels([driver_1, driver_2])
-  plt.savefig(f"lapcomparison.png", dpi=300)
+  await ctx.send("Sending Lap Comparison")
+  plt.savefig(f"lapcomparison.png")
   with open('lapcomparison.png', 'rb') as f:
     picture = discord.File(f)
     await ctx.send(file=picture)
