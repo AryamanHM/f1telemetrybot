@@ -114,7 +114,7 @@ async def _command(ctx,arg1,arg2,arg3,arg4,arg5):
   with open('telemetry.png', 'rb') as f:
     picture = discord.File(f)
     await ctx.send(file=picture)
-  """ 
+  plt.clf()  
   telemetry_driver_1['Driver'] = driver_1
   telemetry_driver_2['Driver'] = driver_2
 
@@ -175,8 +175,7 @@ async def _command(ctx,arg1,arg2,arg3,arg4,arg5):
   plt.savefig(f"lapcomparison.png")
   with open('lapcomparison.png', 'rb') as f:
     picture = discord.File(f)
-    await ctx.send(file=picture)
- """    
+    await ctx.send(file=picture)    
     
   
   ff1.Cache.clear_cache('cache')   
