@@ -114,6 +114,67 @@ async def _command(ctx,arg1,arg2,arg3,arg4,arg5):
   with open('telemetry.png', 'rb') as f:
     picture = discord.File(f)
     await ctx.send(file=picture)
+  telemetry_driver_1['Driver'] = driver_1
+  telemetry_driver_2['Driver'] = driver_2
+
+  telemetry = pd.concat([telemetry_driver_1, telemetry_driver_2])  
+  num_minisectors = 25
+  total_distance = max(telemetry['Distance'])
+  minisector_length = total_distance / num_minisectors
+
+  minisectors = [0]
+
+  for i in range(0, (num_minisectors - 1)):
+      minisectors.append(minisector_length * (i + 1))
+
+  # Assign a minisector number to every row in the telemetry dataframe
+  telemetry['Minisector'] = telemetry['Distance'].apply(
+      lambda dist: (
+          int((dist // minisector_length) + 1)
+      )
+  )
+  # Calculate minisector speeds per driver
+  average_speed = telemetry.groupby(['Minisector', 'Driver'])['Speed'].mean().reset_index()
+
+  # Per minisector, find the fastest driver
+  fastest_driver = average_speed.loc[average_speed.groupby(['Minisector'])['Speed'].idxmax()]
+  fastest_driver = fastest_driver[['Minisector', 'Driver']].rename(columns={'Driver': 'Fastest_driver'})
+
+  # Merge the fastest_driver dataframe to the telemetry dataframe on minisector
+  telemetry = telemetry.merge(fastest_driver, on=['Minisector'])
+  telemetry = telemetry.sort_values(by=['Distance'])
+
+  # Since our plot can only work with integers, we need to convert the driver abbreviations to integers (1 or 2)
+  telemetry.loc[telemetry['Fastest_driver'] == driver_1, 'Fastest_driver_int'] = 1
+  telemetry.loc[telemetry['Fastest_driver'] == driver_2, 'Fastest_driver_int'] = 2
+  # Get the x and y coordinates 
+  x = np.array(telemetry['X'].values)
+  y = np.array(telemetry['Y'].values)
+
+  # Convert the coordinates to points, and then concat them into segments
+  points = np.array([x, y]).T.reshape(-1, 1, 2)
+  segments = np.concatenate([points[:-1], points[1:]], axis=1)
+  fastest_driver_array = telemetry['Fastest_driver_int'].to_numpy().astype(float)
+  # The segments we just created can now be colored according to the fastest driver in a minisector
+  cmap = ListedColormap([color_1, color_2])
+  lc_comp = LineCollection(segments, norm=plt.Normalize(1, cmap.N+1), cmap=cmap)
+  lc_comp.set_array(fastest_driver_array)
+  lc_comp.set_linewidth(5)
+  # Create the plot 
+  plt.rcParams['figure.figsize'] = [18, 10]
+  plt.title(f'Lap Comparison between {driver_1} and {driver_2}')
+  plt.gca().add_collection(lc_comp)
+  plt.axis('equal')
+  plt.tick_params(labelleft=False, left=False, labelbottom=False, bottom=False)
+
+  cbar = plt.colorbar(mappable=lc_comp, boundaries=np.arange(1,4),ticks=[driver_1,driver_2])
+  cbar.set_ticks(np.arange(1.5, 3.5))
+  cbar.set_ticklabels([driver_1, driver_2])
+  plt.savefig(f"lapcomparison.png", dpi=300)
+  with open('lapcomparison.png', 'rb') as f:
+    picture = discord.File(f)
+    await ctx.send(file=picture)
+    
   
   ff1.Cache.clear_cache('cache')   
 
