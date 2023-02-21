@@ -10,7 +10,7 @@ import numpy as np
 from matplotlib.colors import ListedColormap
 from matplotlib.collections import LineCollection
 import asyncio
-#from keep_alive import keep_alive
+from keep_alive import keep_alive
 
 
 prefix = "#fuan "
@@ -182,11 +182,11 @@ async def _command(ctx,arg1,arg2,arg3,arg4,arg5):
 
 
 @client.command(name="strategy")
-async def _command(ctx,arg1,arg2):
-  year=arg1
-  track=arg2
-  await ctx.send("{},{}".format(year,track))
-  race = ff1.get_session(year, track, 'R')
+async def _strategy(ctx,arg1,arg2):
+  circuit=arg1
+  year=arg2
+  await ctx.send("{},{}".format(year,circuit))
+  race = ff1.get_session(int(year), str(circuit), 'R')
   laps = race.load_laps(with_telemetry=True)
   driver_stints = laps[['Driver', 'Stint', 'Compound', 'LapNumber']].groupby(
     ['Driver', 'Stint', 'Compound']
@@ -221,7 +221,7 @@ async def _command(ctx,arg1,arg2):
           previous_stint_end = previous_stint_end + stint['StintLength']
           
   # Set title
-  plt.title(f'Race strategy - {track} {year}')
+  plt.title(f'Race strategy - {circuit} {year}')
           
   # Set x-label
   plt.xlabel('Lap')
@@ -235,9 +235,7 @@ async def _command(ctx,arg1,arg2):
   ax.spines['left'].set_visible(False)
 
   plt.savefig('strategy.png', dpi=300)
-
-  #plt.show()
-  with open('lapcomparison.png', 'rb') as f:
+  with open('strategy.png', 'rb') as f:
     picture = discord.File(f)
     await ctx.send(file=picture)
   ff1.Cache.clear_cache('cache')   
