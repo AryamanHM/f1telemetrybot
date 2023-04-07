@@ -9,7 +9,7 @@ import pandas as pd
 import numpy as np
 from matplotlib.colors import ListedColormap
 from matplotlib.collections import LineCollection
-from keep_alive import keep_alive
+#from keep_alive import keep_alive
 import requests
 import seaborn as sns
 prefix = "#fuan "
@@ -318,7 +318,7 @@ async def _strategy(ctx,arg1,arg2):
   #ff1.Cache.clear_cache('cache')
   #os. system('rm -rf cache/*')
 
-keep_alive()
+#keep_alive()
 my_secret = os.environ['TOKEN']
 client.run(my_secret)
 ##token = os.environ.get('BOT_TOKEN')
